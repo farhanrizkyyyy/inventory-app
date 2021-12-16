@@ -1,6 +1,8 @@
 const express = require('express')
 const bodyParser = require('body-parser')
+const md5 = require('md5')
 const Inventory = require('./models/Inventory.js')
+const Admin = require('./models/Admin.js')
 
 require('./configs/db')
 
@@ -17,6 +19,8 @@ app.get('/', (req, res) => {
     message: 'Hello, this is the root.'
   })
 })
+
+// START INVENTORY
 
 //set route getAllInventory
 app.get('/inventory', (req, res) => {
@@ -99,8 +103,8 @@ app.put('/inventory/update/:_id', (req, res) => {
   })
 
   getInventory.updateOne({
-    name: req.body.name,
-    qty: req.body.qty
+    name: req.params.name,
+    qty: req.params.qty
   }, (error, inventory) => {
     if (error) {
       return res.json({
@@ -140,6 +144,45 @@ app.delete('/inventory/delete/:_id', (req, res) => {
       status: 'Success',
       message: 'Data deleted.',
       data: inventory
+    })
+  })
+})
+
+// END INVENTORY
+
+app.get('/admin', (req, res) => {
+  Admin.find((error, admin) => {
+    if (error) {
+      return res.json({
+        status: 'Error',
+        message: error
+      })
+    }
+
+    res.json({
+      status: 'Success',
+      message: 'Data retrieved.',
+      data: admin
+    })
+  })
+})
+
+app.post('/admin', (req, res) => {
+  Admin.insertMany({
+    username: req.body.username,
+    password: md5(req.body.password)
+  }, (error, admin) => {
+    if (error) {
+      return res.json({
+        status: 'Error',
+        message: error
+      })
+    }
+
+    res.json({
+      status: 'Success',
+      message: 'New admin has been added.',
+      data: admin
     })
   })
 })

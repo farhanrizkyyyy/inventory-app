@@ -8,6 +8,10 @@ const Inventory = mongoose.model('Inventory', {
   qty: {
     type: String,
     required: true
+  },
+  img: {
+    type: String,
+    required: false
   }
 })
 
