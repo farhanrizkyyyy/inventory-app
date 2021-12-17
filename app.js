@@ -7,7 +7,7 @@ const Admin = require('./models/Admin.js')
 require('./configs/db')
 
 const app = express()
-const port = 5000
+const port = process.env.port || 5000
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
